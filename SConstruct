@@ -25,8 +25,19 @@ env['ASCOM'] = env['ASPPCOM']
 Export('RTT_ROOT')
 Export('rtconfig')
 
+if os.getenv('BEAR_PKG_ROOT'):
+    BEAR_PKG_ROOT = os.getenv('BEAR_PKG_ROOT')
+else:
+    print("please set BEAR_PKG_ROOT to build pakage ROOT!")
+    sys.exit(-1)
+
+Export('BEAR_PKG_ROOT')
+
 # prepare building environment
 objs = PrepareBuilding(env, RTT_ROOT)
+
+# include libraries
+objs.extend(SConscript(os.path.join(BEAR_PKG_ROOT, 'SConscript')))
 
 # make a building
 DoBuilding(TARGET, objs)
